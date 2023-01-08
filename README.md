@@ -1,6 +1,6 @@
 # User Service
 
-### A web service that handles user authentication by JWT
+### A web service that handles user JWT authentication
 
 ## API Documentation
 

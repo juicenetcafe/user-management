@@ -3,6 +3,182 @@ info:
   title: User Service
   version: 1.0.0
   description: |-
-    A web service that handles user authentication by JWT
+    A web service that handles user JWT authentication
 
-paths: {}
+servers:
+  - url: http://localhost:8080
+
+tags:
+  - name: Users
+  - name: Login
+
+paths:
+  /login:
+    post:
+      tags:
+        - Login
+      summary: Basic Spring Security Login Endpoint
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: string
+                password:
+                  type: string
+              example:
+                user: 'user'
+                password: '8dbbd012-3c97-4fdd-af3b-9a7259f54c1f'
+      responses:
+        '200':
+          description: Logged in
+  /users:
+    get:
+      tags:
+        - Users
+      summary: Retrieve a list of users
+      responses:
+        '200':
+          description: A list of users.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/userResponseSchema'
+    post:
+      tags:
+        - Users
+      summary: Create user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userRequestBodySchema'
+      responses:
+        '201':
+          description: User Created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userResponseSchema'
+        '400':
+          description: If the validation fails, Bad Request HTTP "ValidationErrorResponse" will be returned instead
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/validationErrorResponse'
+  /users/{username}:
+    parameters:
+      - $ref: '#/components/parameters/username'
+    get:
+      tags:
+        - Users
+      summary: Retrieve an user by username
+      responses:
+        '200':
+          description: The user object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userResponseSchema'
+        '404':
+          description: If the "username" doesn't exists, Not Found HTTP "ResponseStatusException" will be thrown
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/responseStatusException'
+
+components:
+  parameters:
+    username:
+      name: username
+      in: path
+      required: true
+      schema:
+        type: string
+
+  schemas:
+    validationErrorResponse:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                readOnly: true
+              message:
+                type: string
+                readOnly: true
+            example:
+              field: 'username'
+              message: 'must not be empty'
+
+    responseStatusException:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: datetime
+          readOnly: true
+        status:
+          type: integer
+          readOnly: true
+        error:
+          type: string
+          readOnly: true
+        message:
+          type: string
+          readOnly: true
+        path:
+          type: string
+          readOnly: true
+      example:
+        timestamp: '2023-01-08T22:53:48.337+00:00'
+        status: 404
+        error: 'Not Found'
+        message: 'USER_NOT_FOUND'
+        path: '/users/nonexistence'
+
+    userResponseSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      example:
+        id: 1
+        name: 'John Deere'
+        username: 'johndeere'
+        email: 'johndeere@email.com'
+        password: '$2a$10$t2OurYj/JExTmPkg8pOjxunO9mtJXBxEc86PwlQJ5amMTf66GQ7sS'
+
+    userRequestBodySchema:
+      type: object
+      properties:
+        name:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 8
