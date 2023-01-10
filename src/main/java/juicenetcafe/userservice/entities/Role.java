@@ -4,13 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import javax.validation.constraints.Email;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -18,7 +17,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class Role {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
@@ -27,23 +26,4 @@ public class User {
     @NotEmpty
     @Size(max = 255)
     private String name;
-
-    @NotNull
-    @NotEmpty
-    @Size(max = 255)
-    private String username;
-
-    @NotNull
-    @NotEmpty
-    @Email
-    @Size(max = 255)
-    private String email;
-
-    @NotNull
-    @NotEmpty
-    @Size(min = 8)
-    private String password;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Collection<Role> roles = new ArrayList<>();
 }

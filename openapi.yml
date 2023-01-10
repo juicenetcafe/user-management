@@ -9,8 +9,9 @@ servers:
   - url: http://localhost:8080
 
 tags:
-  - name: Users
   - name: Login
+  - name: Role Resource
+  - name: User Resource
 
 paths:
   /login:
@@ -21,7 +22,7 @@ paths:
       requestBody:
         required: true
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
@@ -34,24 +35,99 @@ paths:
                 password: '8dbbd012-3c97-4fdd-af3b-9a7259f54c1f'
       responses:
         '200':
-          description: Logged in
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tokenResponseSchema'
+        '403':
+          description: Forbidden (check provided credentials)
+
+  /roles:
+    get:
+      tags:
+        - Role Resource
+      security:
+        - bearerAuth: []
+      summary: Retrieve a list of roles
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/roleResponseSchema'
+        '403':
+          description: Forbidden (unauthorized user or expired token)
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/forbiddenResponseSchema'
+                  - $ref: '#/components/schemas/forbiddenExpiredTokenResponseSchema'
+    post:
+      tags:
+        - Role Resource
+      security:
+        - bearerAuth: []
+      summary: Create role
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/roleRequestBodySchema'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/roleCreationResponseSchema'
+        '400':
+          description: Bad Request ("ValidationErrorResponse")
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/validationErrorResponseSchema'
+        '403':
+          description: Forbidden (unauthorized user or expired token)
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/forbiddenResponseSchema'
+                  - $ref: '#/components/schemas/forbiddenExpiredTokenResponseSchema'
+
   /users:
     get:
       tags:
-        - Users
+        - User Resource
+      security:
+        - bearerAuth: []
       summary: Retrieve a list of users
       responses:
         '200':
-          description: A list of users.
+          description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/userResponseSchema'
+        '403':
+          description: Forbidden (unauthorized user or expired token)
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/forbiddenResponseSchema'
+                  - $ref: '#/components/schemas/forbiddenExpiredTokenResponseSchema'
     post:
       tags:
-        - Users
+        - User Resource
+      security:
+        - bearerAuth: []
       summary: Create user
       requestBody:
         required: true
@@ -61,39 +137,63 @@ paths:
               $ref: '#/components/schemas/userRequestBodySchema'
       responses:
         '201':
-          description: User Created.
+          description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/userResponseSchema'
+                $ref: '#/components/schemas/userCreationResponseSchema'
         '400':
-          description: If the validation fails, Bad Request HTTP "ValidationErrorResponse" will be returned instead
+          description: Bad Request ("ValidationErrorResponse")
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/validationErrorResponse'
+                $ref: '#/components/schemas/validationErrorResponseSchema'
+        '403':
+          description: Forbidden (unauthorized user or expired token)
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/forbiddenResponseSchema'
+                  - $ref: '#/components/schemas/forbiddenExpiredTokenResponseSchema'
   /users/{username}:
     parameters:
       - $ref: '#/components/parameters/username'
     get:
       tags:
-        - Users
+        - User Resource
+      security:
+        - bearerAuth: []
       summary: Retrieve an user by username
       responses:
         '200':
-          description: The user object.
+          description: OK
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/userResponseSchema'
+        '403':
+          description: Forbidden (unauthorized user or expired token)
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/forbiddenResponseSchema'
+                  - $ref: '#/components/schemas/forbiddenExpiredTokenResponseSchema'
         '404':
-          description: If the "username" doesn't exists, Not Found HTTP "ResponseStatusException" will be thrown
+          description: Not Found ("ResponseStatusException")
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/responseStatusException'
 
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
   parameters:
     username:
       name: username
@@ -103,7 +203,7 @@ components:
         type: string
 
   schemas:
-    validationErrorResponse:
+    validationErrorResponseSchema:
       type: object
       properties:
         errors:
@@ -118,8 +218,43 @@ components:
                 type: string
                 readOnly: true
             example:
-              field: 'username'
+              field: 'field'
               message: 'must not be empty'
+
+    forbiddenResponseSchema:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: datetime
+          readOnly: true
+        status:
+          type: integer
+          readOnly: true
+        error:
+          type: string
+          readOnly: true
+        message:
+          type: string
+          readOnly: true
+        path:
+          type: string
+          readOnly: true
+      example:
+        timestamp: '2023-01-10T16:07:56.298+00:00'
+        status: 403
+        error: 'Forbidden'
+        message: 'Forbidden'
+        path: '/resource'
+
+    forbiddenExpiredTokenResponseSchema:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+      example:
+        error: 'The Token has expired on 2023-01-10T14:55:30Z.'
 
     responseStatusException:
       type: object
@@ -147,7 +282,77 @@ components:
         message: 'USER_NOT_FOUND'
         path: '/users/nonexistence'
 
+    tokenResponseSchema:
+      type: object
+      properties:
+        access_token:
+          type: string
+          readOnly: true
+        refresh_token:
+          type: string
+          readOnly: true
+      example:
+        access_token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huZGVlcmUiLCJyb2xlcyI6WyJHVUVTVCJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvbG9naW4iLCJleHAiOjE2NzMzNjUwNjR9.Ud9Kc4OOnaxqUbfHU7qOiAYkiWd8on48mvqagtp7208'
+        refresh_token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huZGVlcmUiLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvbG9naW4iLCJleHAiOjE2NzMzNjYyNjR9.dSszfA8QivD77MVB7sNXPJyHBlJ8Abe4kqvD0Bej6JM'
+
+    roleResponseSchema:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+            readOnly: true
+          name:
+            type: string
+            readOnly: true
+        example:
+          id: 1
+          name: 'GUEST'
+
+    roleCreationResponseSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+      example:
+        id: 1
+        name: 'GUEST'
+
     userResponseSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+        roles:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/roleResponseSchema'
+      example:
+        id: 1
+        name: 'John Deere'
+        username: 'johndeere'
+        email: 'johndeere@email.com'
+        password: '$2a$10$t2OurYj/JExTmPkg8pOjxunO9mtJXBxEc86PwlQJ5amMTf66GQ7sS'
+        roles:
+          - id: 1
+            name: 'GUEST'
+
+    userCreationResponseSchema:
       type: object
       properties:
         id:
@@ -168,6 +373,13 @@ components:
         username: 'johndeere'
         email: 'johndeere@email.com'
         password: '$2a$10$t2OurYj/JExTmPkg8pOjxunO9mtJXBxEc86PwlQJ5amMTf66GQ7sS'
+        roles: []
+
+    roleRequestBodySchema:
+      type: object
+      properties:
+        name:
+          type: string
 
     userRequestBodySchema:
       type: object

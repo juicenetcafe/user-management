@@ -1,6 +1,5 @@
 package juicenetcafe.userservice.config.validation;
 
-import juicenetcafe.userservice.config.validation.ErrorModel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

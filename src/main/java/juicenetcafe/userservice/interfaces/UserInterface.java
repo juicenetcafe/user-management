@@ -9,5 +9,7 @@ public interface UserInterface {
 
     User create(User user);
 
+    void addRoleToUser(String username, String roleName);
+
     User details(String username);
 }
