@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +32,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class AuthenticationController {
     private final UserService userService;
 
-    @GetMapping("/token/refresh")
+    @GetMapping("/login/refresh")
     public void refreshToken(@NotNull HttpServletRequest request, HttpServletResponse response) throws IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
@@ -62,7 +63,7 @@ public class AuthenticationController {
                 new ObjectMapper().writeValue(response.getOutputStream(), error);
             }
         } else {
-            throw new RuntimeException("REFRESH_TOKEN_IS_MISSING");
+            throw new ResponseStatusException(FORBIDDEN, "REFRESH_TOKEN_IS_MISSING");
         }
     }
 }

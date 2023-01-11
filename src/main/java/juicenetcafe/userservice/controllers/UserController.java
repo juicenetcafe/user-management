@@ -29,9 +29,9 @@ public class UserController {
         return new ResponseEntity<>(userService.create(user), HttpStatus.CREATED);
     }
 
-    @PostMapping("/role/add")
-    public ResponseEntity<?> addRoleToUser(@RequestBody @NotNull RoleToUser form) {
-        userService.addRoleToUser(form.getUsername(), form.getRoleName());
+    @PostMapping("/assign-role")
+    public ResponseEntity<?> assignRoleToUser(@Valid @RequestBody @NotNull RoleToUser request) {
+        userService.assignRoleToUser(request.getUsername(), request.getRoleName());
 
         return ResponseEntity.ok().build();
     }

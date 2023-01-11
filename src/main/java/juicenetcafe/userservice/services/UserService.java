@@ -44,7 +44,7 @@ public class UserService implements UserInterface, UserDetailsService {
     }
 
     @Override
-    public void addRoleToUser(String username, String roleName) {
+    public void assignRoleToUser(String username, String roleName) {
         log.info("Assigning role {} to user {}", roleName, username);
         User user = userRepository.findByUsername(username);
         Role role = roleRepository.findByName(roleName);

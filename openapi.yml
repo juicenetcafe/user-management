@@ -43,6 +43,29 @@ paths:
         '403':
           description: Forbidden (check provided credentials)
 
+  /login/refresh:
+    get:
+      tags:
+        - Login
+      security:
+        - bearerAuth: []
+      summary: Refresh token
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tokenResponseSchema'
+        '403':
+          description: Forbidden (unauthorized user or expired token)
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/forbiddenResponseSchema'
+                  - $ref: '#/components/schemas/forbiddenExpiredTokenResponseSchema'
+
   /roles:
     get:
       tags:
@@ -187,6 +210,45 @@ paths:
               schema:
                 $ref: '#/components/schemas/responseStatusException'
 
+  /users/assign-role:
+    post:
+      tags:
+        - User Resource
+      security:
+        - bearerAuth: []
+      summary: Assign role to user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                roleName:
+                  type: string
+              example:
+                username: 'johndoe'
+                roleName: 'GUEST'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request ("ValidationErrorResponse")
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/validationErrorResponseSchema'
+        '403':
+          description: Forbidden (unauthorized user or expired token)
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/forbiddenResponseSchema'
+                  - $ref: '#/components/schemas/forbiddenExpiredTokenResponseSchema'
+
 components:
   securitySchemes:
     bearerAuth:
@@ -292,7 +354,7 @@ components:
           type: string
           readOnly: true
       example:
-        access_token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huZGVlcmUiLCJyb2xlcyI6WyJHVUVTVCJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvbG9naW4iLCJleHAiOjE2NzMzNjUwNjR9.Ud9Kc4OOnaxqUbfHU7qOiAYkiWd8on48mvqagtp7208'
+        access_token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huZGanimUiLCJyb2xlcyI6WyJHVUVTVCJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvbG9naW4iLCJleHAiOjE2NzMzNjUwNjR9.Ud9Kc4OOnaxqUbfHU7qOiAYkiWd8on48mvqagtp7208'
         refresh_token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huZGVlcmUiLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvbG9naW4iLCJleHAiOjE2NzMzNjYyNjR9.dSszfA8QivD77MVB7sNXPJyHBlJ8Abe4kqvD0Bej6JM'
 
     roleResponseSchema:

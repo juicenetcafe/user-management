@@ -34,8 +34,8 @@ public class UserserviceApplication {
             userService.create(new User(null, "Admin", "admin", "admin@email.com", "airliner", new ArrayList<>()));
             userService.create(new User(null, "John Deere", "johndeere", "johndeere@email.com", "airliner", new ArrayList<>()));
 
-            userService.addRoleToUser("admin", "ADMIN");
-            userService.addRoleToUser("johndeere", "GUEST");
+            userService.assignRoleToUser("admin", "ADMIN");
+            userService.assignRoleToUser("johndeere", "GUEST");
         };
     }
 }
