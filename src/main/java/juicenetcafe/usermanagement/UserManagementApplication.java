@@ -1,9 +1,9 @@
-package juicenetcafe.userservice;
+package juicenetcafe.usermanagement;
 
-import juicenetcafe.userservice.entities.Role;
-import juicenetcafe.userservice.entities.User;
-import juicenetcafe.userservice.services.RoleService;
-import juicenetcafe.userservice.services.UserService;
+import juicenetcafe.usermanagement.entities.Role;
+import juicenetcafe.usermanagement.entities.User;
+import juicenetcafe.usermanagement.services.RoleService;
+import juicenetcafe.usermanagement.services.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,10 +14,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.ArrayList;
 
 @SpringBootApplication
-public class UserserviceApplication {
+public class UserManagementApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(UserserviceApplication.class, args);
+        SpringApplication.run(UserManagementApplication.class, args);
     }
 
     @Bean

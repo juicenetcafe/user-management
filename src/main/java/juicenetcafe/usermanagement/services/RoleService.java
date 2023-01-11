@@ -1,8 +1,8 @@
-package juicenetcafe.userservice.services;
+package juicenetcafe.usermanagement.services;
 
-import juicenetcafe.userservice.entities.Role;
-import juicenetcafe.userservice.interfaces.RoleInterface;
-import juicenetcafe.userservice.repositories.RoleRepository;
+import juicenetcafe.usermanagement.entities.Role;
+import juicenetcafe.usermanagement.interfaces.RoleInterface;
+import juicenetcafe.usermanagement.repositories.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;

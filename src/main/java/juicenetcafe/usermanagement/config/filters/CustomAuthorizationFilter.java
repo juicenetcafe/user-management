@@ -1,4 +1,4 @@
-package juicenetcafe.userservice.config.filters;
+package juicenetcafe.usermanagement.config.filters;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;

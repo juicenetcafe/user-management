@@ -1,6 +1,6 @@
-package juicenetcafe.userservice.repositories;
+package juicenetcafe.usermanagement.repositories;
 
-import juicenetcafe.userservice.entities.User;
+import juicenetcafe.usermanagement.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {

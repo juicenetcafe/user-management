@@ -1,6 +1,6 @@
-package juicenetcafe.userservice.interfaces;
+package juicenetcafe.usermanagement.interfaces;
 
-import juicenetcafe.userservice.entities.User;
+import juicenetcafe.usermanagement.entities.User;
 
 import java.util.List;
 

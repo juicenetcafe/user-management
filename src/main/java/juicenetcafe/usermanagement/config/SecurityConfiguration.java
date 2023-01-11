@@ -1,7 +1,7 @@
-package juicenetcafe.userservice.config;
+package juicenetcafe.usermanagement.config;
 
-import juicenetcafe.userservice.config.filters.CustomAuthenticationFilter;
-import juicenetcafe.userservice.config.filters.CustomAuthorizationFilter;
+import juicenetcafe.usermanagement.config.filters.CustomAuthenticationFilter;
+import juicenetcafe.usermanagement.config.filters.CustomAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;

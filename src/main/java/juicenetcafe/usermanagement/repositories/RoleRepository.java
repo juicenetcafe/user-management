@@ -1,6 +1,6 @@
-package juicenetcafe.userservice.repositories;
+package juicenetcafe.usermanagement.repositories;
 
-import juicenetcafe.userservice.entities.Role;
+import juicenetcafe.usermanagement.entities.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RoleRepository extends JpaRepository<Role, Long> {

@@ -1,7 +1,7 @@
-package juicenetcafe.userservice.controllers;
+package juicenetcafe.usermanagement.controllers;
 
-import juicenetcafe.userservice.entities.Role;
-import juicenetcafe.userservice.services.RoleService;
+import juicenetcafe.usermanagement.entities.Role;
+import juicenetcafe.usermanagement.services.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

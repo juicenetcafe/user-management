@@ -1,4 +1,4 @@
-package juicenetcafe.userservice.entities;
+package juicenetcafe.usermanagement.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

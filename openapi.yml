@@ -1,9 +1,9 @@
 openapi: 3.0.3
 info:
-  title: User Service
+  title: User Management Application
   version: 1.0.0
   description: |-
-    A web service that handles user JWT authentication
+    This is a web service that mainly focuses on handling user authentication using JSON Web Token.
 
 servers:
   - url: http://localhost:8080

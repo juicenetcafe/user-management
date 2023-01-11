@@ -1,4 +1,4 @@
-package juicenetcafe.userservice.config.validation;
+package juicenetcafe.usermanagement.config.validation;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;

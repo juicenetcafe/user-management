@@ -1,10 +1,10 @@
-package juicenetcafe.userservice.services;
+package juicenetcafe.usermanagement.services;
 
-import juicenetcafe.userservice.entities.Role;
-import juicenetcafe.userservice.entities.User;
-import juicenetcafe.userservice.interfaces.UserInterface;
-import juicenetcafe.userservice.repositories.RoleRepository;
-import juicenetcafe.userservice.repositories.UserRepository;
+import juicenetcafe.usermanagement.entities.Role;
+import juicenetcafe.usermanagement.entities.User;
+import juicenetcafe.usermanagement.interfaces.UserInterface;
+import juicenetcafe.usermanagement.repositories.RoleRepository;
+import juicenetcafe.usermanagement.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;

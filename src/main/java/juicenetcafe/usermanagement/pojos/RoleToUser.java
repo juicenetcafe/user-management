@@ -1,4 +1,4 @@
-package juicenetcafe.userservice.pojos;
+package juicenetcafe.usermanagement.pojos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

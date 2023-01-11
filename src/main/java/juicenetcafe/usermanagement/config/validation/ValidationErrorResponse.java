@@ -1,4 +1,4 @@
-package juicenetcafe.userservice.config.validation;
+package juicenetcafe.usermanagement.config.validation;
 
 import lombok.Builder;
 import lombok.Data;

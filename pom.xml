@@ -9,10 +9,12 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>juicenetcafe</groupId>
-    <artifactId>userservice</artifactId>
+    <artifactId>user-management</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>userservice</name>
-    <description>A web service that handles user JWT authentication</description>
+    <name>user-management</name>
+    <description>
+        This is a web service that mainly focuses on handling user authentication using JSON Web Token.
+    </description>
     <properties>
         <java.version>11</java.version>
     </properties>
